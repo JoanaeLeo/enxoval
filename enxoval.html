@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Enxoval Casa J &amp; L</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,700;1,500&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fbf4ef;--bg2:#f4e6df;--card:#fffdfb;--line:#ead6cc;--tx:#4a3238;--mut:#8f7176;--rose:#c4707e;--rose2:#a9566a;--gold:#b98f52;--ok:#6f9a7a;--bad:#b4495a;--on-rose:#fff;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#2a1d22;--bg2:#35252b;--card:#3b2a31;--line:#533b44;--tx:#f5e6e4;--mut:#c0a2a6;--rose:#e08a99;--rose2:#f0a3b0;--gold:#d9b27a;--ok:#8fc19b;--bad:#ea8696;--on-rose:#2a1d22}}
+:root[data-theme="dark"]{--bg:#2a1d22;--bg2:#35252b;--card:#3b2a31;--line:#533b44;--tx:#f5e6e4;--mut:#c0a2a6;--rose:#e08a99;--rose2:#f0a3b0;--gold:#d9b27a;--ok:#8fc19b;--bad:#ea8696;--on-rose:#2a1d22}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.45 Inter,system-ui,sans-serif;
+background-image:radial-gradient(circle at 10% 0%,rgba(196,112,126,.14),transparent 40%),radial-gradient(circle at 95% 20%,rgba(185,143,82,.12),transparent 35%);background-attachment:fixed}
+.wrap{max-width:900px;margin:0 auto;padding:18px 16px 40px}
+h1,h2,.num{font-family:"Cormorant Garamond",Georgia,serif}
+header{text-align:center;margin:8px 0 18px;position:relative}
+h1{margin:0;font-size:38px;font-weight:700;color:var(--rose2);line-height:1.1}
+h1 em{color:var(--gold);font-style:italic;font-weight:500}
+.sub{color:var(--mut);font-size:13px;letter-spacing:.18em;text-transform:uppercase;margin-top:4px}
+.orn{color:var(--gold);letter-spacing:.6em;font-size:12px;margin-top:6px}
+#sync{position:absolute;right:0;top:0;font-size:11px;padding:4px 10px;border:1px solid var(--line);border-radius:99px;color:var(--mut);background:var(--card);cursor:pointer}
+#sync.on{color:var(--ok);border-color:var(--ok)}#sync.err{color:var(--bad);border-color:var(--bad)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:12px}
+.st{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 14px;text-align:center}
+.st .l{font-size:11px;color:var(--mut);text-transform:uppercase;letter-spacing:.12em}
+.num{font-size:28px;font-weight:700;color:var(--rose2)}
+.bar{height:10px;background:var(--bg2);border-radius:99px;overflow:hidden;margin-bottom:6px}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--rose),var(--gold));border-radius:99px;transition:width .5s}
+.pct{text-align:right;color:var(--mut);font-size:12px;margin-bottom:16px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:14px;box-shadow:0 2px 12px rgba(196,112,126,.08)}
+.row{display:flex;flex-wrap:wrap;gap:8px}
+input,select{background:var(--bg);color:var(--tx);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font:inherit;min-width:0}
+input:focus,select:focus{outline:2px solid var(--rose);outline-offset:0}
+#f-nome{flex:2 1 180px}#f-cat,#f-prio{flex:1 1 120px}#f-qtd{flex:0 1 70px}#f-preco{flex:1 1 110px}#f-link{flex:2 1 180px}
+button{cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--tx);border-radius:10px;padding:10px 16px;font:600 14px Inter,sans-serif}
+button.pri{background:var(--rose);color:var(--on-rose);border-color:var(--rose)}
+button.ghost{background:transparent;color:var(--mut);font-size:12px;font-weight:400}
+.chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;margin:12px 0}
+.chips button{white-space:nowrap;padding:6px 14px;font-size:13px;border-radius:99px}
+.chips button.a{background:var(--rose);color:var(--on-rose);border-color:var(--rose)}
+.cat{margin:22px 0 8px;display:flex;align-items:baseline;gap:10px;border-bottom:1px solid var(--gold);padding-bottom:4px}
+.cat h2{margin:0;font-size:24px;color:var(--rose2)}
+.cat span{color:var(--mut);font-size:12px;margin-left:auto}
+.it{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:8px}
+.it.ok{opacity:.6}.it.ok .nm{text-decoration:line-through}
+.it input[type=checkbox]{width:22px;height:22px;accent-color:var(--rose);flex:none}
+.mid{flex:1;min-width:0}.nm{font-weight:600;overflow-wrap:anywhere}
+.meta{color:var(--mut);font-size:12px;overflow-wrap:anywhere}
+.tag{font-size:10px;padding:1px 8px;border-radius:99px;border:1px solid;text-transform:uppercase;letter-spacing:.06em}
+.p1{color:var(--bad)}.p2{color:var(--gold)}.p3{color:var(--mut)}
+.val{font:700 19px "Cormorant Garamond",serif;text-align:right;white-space:nowrap}
+.acts{display:flex;gap:4px}.acts button{padding:4px 9px;font-size:13px}
+.empty{text-align:center;color:var(--mut);padding:34px 10px;font-style:italic}
+dialog{max-height:90vh;overflow:auto;background:var(--card);color:var(--tx);border:1px solid var(--line);border-radius:16px;padding:18px;width:min(440px,92vw)}
+dialog::backdrop{background:rgba(40,20,28,.5)}
+dialog h3{margin:0 0 8px;font:700 24px "Cormorant Garamond",serif;color:var(--rose2)}
+dialog label{display:block;font-size:12px;color:var(--mut);margin:10px 0 3px}
+dialog input,dialog select{width:100%}
+textarea{background:var(--bg);color:var(--tx);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font:inherit;width:100%;min-height:64px;resize:vertical}
+textarea:focus{outline:2px solid var(--rose)}
+.mid{cursor:pointer}
+dialog p{font-size:13px;color:var(--mut);margin:6px 0}
+.dr{display:flex;gap:8px;justify-content:flex-end;margin-top:14px;flex-wrap:wrap}
+#msg{font-size:12px;color:var(--bad);min-height:16px}
+@media(max-width:520px){.it{flex-wrap:wrap}.val{order:3}h1{font-size:30px}#sync{position:static;display:inline-block;margin-bottom:8px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+ <div id="sync" title="Configurar sincronização">…</div>
+ <h1>Enxoval Casa <em>J &amp; L</em></h1>
+ <div class="sub">Nossa lista, nosso lar</div>
+ <div class="orn">♡ ♡ ♡</div>
+</header>
+
+<div class="stats">
+ <div class="st"><div class="l">Itens</div><div class="num" id="s-itens">0</div></div>
+ <div class="st"><div class="l">Já temos</div><div class="num" id="s-ok">0</div></div>
+ <div class="st"><div class="l">Previsto</div><div class="num" id="s-prev">R$ 0</div></div>
+ <div class="st"><div class="l">Gasto</div><div class="num" id="s-gasto">R$ 0</div></div>
+ <div class="st"><div class="l">Falta</div><div class="num" id="s-falta">R$ 0</div></div>
+</div>
+<div class="bar"><i id="prog"></i></div>
+<div class="pct" id="pct"></div>
+
+<div class="panel">
+ <div class="row">
+  <input id="f-nome" placeholder="Item (ex: jogo de panelas)">
+  <select id="f-cat"></select>
+  <input id="f-qtd" type="number" min="1" value="1" aria-label="Quantidade">
+  <input id="f-preco" type="number" min="0" step="0.01" placeholder="Preço un. R$">
+  <select id="f-prio"><option value="1">Alta</option><option value="2" selected>Média</option><option value="3">Baixa</option></select>
+  <input id="f-link" placeholder="Link (opcional)">
+  <button class="pri" id="f-add">Adicionar</button>
+ </div>
+</div>
+
+<div class="row">
+ <input id="q" placeholder="Buscar…" style="flex:1 1 160px">
+ <select id="st"><option value="">Todos</option><option value="falta">Falta comprar</option><option value="ok">Já temos</option></select>
+  <button class="ghost" id="exp">Exportar</button>
+ <button class="ghost" id="imp">Importar</button>
+ <input id="impf" type="file" accept=".json" hidden>
+</div>
+<div class="chips" id="chips"></div>
+<div id="list"></div>
+</div>
+
+<dialog id="ed">
+ <h3>Editar item</h3>
+ <label>Item</label><input id="e-nome">
+ <label>Categoria</label><select id="e-cat"></select>
+ <div class="row"><div style="flex:1"><label>Qtd</label><input id="e-qtd" type="number" min="1"></div><div style="flex:2"><label>Preço un. (R$)</label><input id="e-preco" type="number" min="0" step="0.01"></div></div>
+ <label>Prioridade</label><select id="e-prio"><option value="1">Alta</option><option value="2">Média</option><option value="3">Baixa</option></select>
+ <label>Links (um por linha)</label><textarea id="e-links" placeholder="https://..."></textarea>
+ <label>Observações (modelo, cor, voltagem, loja…)</label><textarea id="e-obs"></textarea>
+ <div class="dr"><button id="e-x">Cancelar</button><button class="pri" id="e-ok">Salvar</button></div>
+</dialog>
+
+<dialog id="cfg">
+ <h3>Sincronização</h3>
+ <p>A lista fica salva num Gist do GitHub. Cada aparelho precisa do ID do Gist e de um token (guardado só neste aparelho).</p>
+ <label>ID do Gist</label><input id="c-gist" autocomplete="off">
+ <label>Token do GitHub (permissão: gist)</label><input id="c-tok" type="password" autocomplete="off">
+ <div id="msg"></div>
+ <p id="c-link"></p>
+ <div class="dr"><button id="c-new">Criar lista nova</button><button id="c-x">Fechar</button><button class="pri" id="c-ok">Salvar</button></div>
+</dialog>
+
+<script>
+const GIST_ID="";               // opcional: cole aqui o ID do Gist para não precisar digitar em cada aparelho
+const FILE="enxoval.json";
+const CATS=["Cozinha","Cama, Mesa e Banho","Serviço","Banheiro","Estar","Quarto","Outros"];
+const LISTA={
+"Cozinha":[["Sanduícheira"],["Geladeira"],["Fogão"],["Filtro"],["Air fryer"],["Batedeira"],["Liquidificador"],["Panela de pressão"],["Toalhas de mesa",3],["Cesto de lixo"],["Jogo de panelas"],["Copos"],["Jogo de xícaras"],["Garrafa térmica"],["Relógio de parede"],["Escorredor"],["Porta papel toalha"],["Pipoqueira"],["Jogo de tempero"],["Saboneteiras",2],["Porta frios"],["Mixer"]],
+"Cama, Mesa e Banho":[["Toalhas de banho",4],["Toalhas de rosto",4],["Piso de banheiro",4],["Tapete de box",2],["Pano de prato"],["Cesto de roupa"],["Cesto de lixo do banheiro"],["Jogo de cama",4],["Cobertores (lençol, manta e edredom)"],["Travesseiros"],["Ventilador"]],
+"Serviço":[["Máquina de lavar"],["Ferro de passar"],["Mop, vassoura e rodo"],["Pano de chão"],["Varal de teto e parede"],["Furadeira/parafusadeira"],["Kit ferramentas"],["Mangueira"],["Extensão",3],["Aspirador de pó"]],
+"Banheiro":[["Chuveiro",2],["Saboneteira",2],["Cesto de roupa"],["Tampa de vaso",2],["Secador"]],
+"Estar":[["Sofá"],["Mesa de jantar"],["Cortinas",3],["Tapete de entrada"]],
+"Quarto":[["Cama (casal ou queen)"],["Guarda-roupa"],["Espelho"],["Cabides"]]};
+let _n=0;const SEEDITEMS=[];
+for(const c in LISTA)for(const [nome,q] of LISTA[c])SEEDITEMS.push({id:"s"+(_n++),nome,cat:c,qtd:q||1,preco:0,prio:2,links:"",obs:"",ok:false,ts:0});
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const brl=n=>"R$ "+(n||0).toLocaleString("pt-BR",{minimumFractionDigits:0,maximumFractionDigits:2});
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+const ls={get:k=>{try{return localStorage.getItem(k)}catch(e){return null}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}}};
+
+let all=[];            // inclui tombstones {id,del:1,ts}
+let catF="",dirty=false,busy=false,timer=null;
+CATS.forEach(c=>["f-cat","e-cat"].forEach(s=>{const o=document.createElement("option");o.value=o.textContent=c;$(s).appendChild(o)}));
+
+/* ---------- config ---------- */
+const m=location.hash.match(/g=([0-9a-f]+)/i);if(m){ls.set("ej_gist",m[1])}
+const gistId=()=>GIST_ID||ls.get("ej_gist")||"";
+const token=()=>ls.get("ej_tok")||"";
+const hdr=()=>{const h={"Accept":"application/vnd.github+json"};if(token())h.Authorization="Bearer "+token();return h};
+function status(t,c){const s=$("sync");s.textContent=t;s.className=c||""}
+
+/* ---------- merge: vence o registro com ts mais recente ---------- */
+function merge(remote){
+ const mp=new Map(all.map(i=>[i.id,i]));
+ for(const r of remote||[]){const l=mp.get(r.id);if(!l||(r.ts||0)>(l.ts||0))mp.set(r.id,r);else if((l.ts||0)>(r.ts||0))dirty=true}
+ const before=all.length;all=[...mp.values()];
+ if(remote&&mp.size>remote.length)dirty=true; // temos itens que o remoto não tem
+}
+const same=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
+
+/* ---------- sync ---------- */
+async function pull(){
+ const r=await fetch("https://api.github.com/gists/"+gistId()+"?t="+Date.now(),{headers:hdr(),cache:"no-store"});
+ if(!r.ok)throw new Error(r.status===404?"Gist não encontrado":"GitHub respondeu "+r.status);
+ const j=await r.json();const f=j.files&&j.files[FILE];
+ if(!f)throw new Error("Arquivo "+FILE+" não existe no Gist");
+ try{return JSON.parse(f.content||"[]")}catch(e){throw new Error("JSON do Gist inválido")}
+}
+async function push(){
+ const r=await fetch("https://api.github.com/gists/"+gistId(),{method:"PATCH",headers:{...hdr(),"Content-Type":"application/json"},body:JSON.stringify({files:{[FILE]:{content:JSON.stringify(all)}}})});
+ if(!r.ok)throw new Error(r.status===401||r.status===403||r.status===404?"Token inválido ou sem permissão de gist":"GitHub respondeu "+r.status);
+}
+async function sync(){
+ if(busy)return;
+ if(!gistId()){status("configurar sync","err");return}
+ busy=true;status("sincronizando…");
+ try{
+  const rem=await pull();
+  const antes=JSON.stringify(all);merge(rem);
+  if(JSON.stringify(all)!==antes){ls.set("ej_cache",JSON.stringify(all));render()}
+  if(dirty&&token()){await push();dirty=false}
+  status(token()?"● sincronizado":"somente leitura",token()?"on":"err");
+ }catch(e){status("sem sync: "+e.message,"err")}
+ busy=false;
+}
+function touch(){ls.set("ej_cache",JSON.stringify(all));dirty=true;render();clearTimeout(timer);timer=setTimeout(sync,700)}
+
+/* ---------- mutações ---------- */
+function put(it){it.ts=Date.now();const i=all.findIndex(x=>x.id===it.id);i>=0?all[i]=it:all.push(it);touch()}
+function del(id){const i=all.findIndex(x=>x.id===id);const t={id,del:1,ts:Date.now()};i>=0?all[i]=t:all.push(t);touch()}
+
+$("f-add").onclick=()=>{
+ const nome=$("f-nome").value.trim();if(!nome){$("f-nome").focus();return}
+ put({id:uid(),nome,cat:$("f-cat").value,qtd:Math.max(1,+$("f-qtd").value||1),preco:Math.max(0,+$("f-preco").value||0),prio:+$("f-prio").value,links:$("f-link").value.trim(),obs:"",ok:false});
+ $("f-nome").value="";$("f-preco").value="";$("f-link").value="";$("f-qtd").value=1;$("f-nome").focus()
+};
+$("f-nome").addEventListener("keydown",e=>{if(e.key==="Enter")$("f-add").click()});
+$("exp").onclick=()=>{const a=document.createElement("a");a.href="data:application/json;charset=utf-8,"+encodeURIComponent(JSON.stringify(live(),null,2));a.download="enxoval.json";a.click()};
+$("imp").onclick=()=>$("impf").click();
+$("impf").onchange=async e=>{
+ try{const arr=JSON.parse(await e.target.files[0].text());if(!Array.isArray(arr))throw 0;
+  arr.forEach(i=>{if(i&&i.nome)all.push({id:uid(),nome:String(i.nome),cat:i.cat||"Outros",qtd:+i.qtd||1,preco:+i.preco||0,prio:+i.prio||2,links:i.links||"",obs:i.obs||"",ok:!!i.ok,ts:Date.now()})});touch()}
+ catch(x){alert("Arquivo inválido.")}e.target.value=""
+};
+["q","st"].forEach(i=>$(i).addEventListener("input",render));
+
+/* edição */
+let editing=null;
+function edit(it){editing=it;$("e-nome").value=it.nome;$("e-cat").value=it.cat;$("e-qtd").value=it.qtd;$("e-preco").value=it.preco||"";$("e-prio").value=it.prio;$("e-links").value=it.links||"";$("e-obs").value=it.obs||"";$("ed").showModal()}
+$("e-x").onclick=()=>$("ed").close();
+$("e-ok").onclick=()=>{const n=$("e-nome").value.trim();if(!n)return;put({...editing,nome:n,cat:$("e-cat").value,qtd:Math.max(1,+$("e-qtd").value||1),preco:Math.max(0,+$("e-preco").value||0),prio:+$("e-prio").value,links:$("e-links").value.trim(),obs:$("e-obs").value.trim()});$("ed").close()};
+
+/* config dialog */
+$("sync").onclick=()=>{$("c-gist").value=gistId();$("c-tok").value=token();$("msg").textContent="";$("c-link").textContent="";$("cfg").showModal()};
+$("c-x").onclick=()=>$("cfg").close();
+$("c-ok").onclick=()=>{ls.set("ej_gist",$("c-gist").value.trim());ls.set("ej_tok",$("c-tok").value.trim());$("cfg").close();dirty=true;sync()};
+$("c-new").onclick=async()=>{
+ const t=$("c-tok").value.trim();if(!t){$("msg").textContent="Cole o token primeiro.";return}
+ try{
+  const r=await fetch("https://api.github.com/gists",{method:"POST",headers:{"Accept":"application/vnd.github+json","Authorization":"Bearer "+t,"Content-Type":"application/json"},body:JSON.stringify({description:"Enxoval Casa J & L",public:false,files:{[FILE]:{content:JSON.stringify(all)}}})});
+  if(!r.ok)throw new Error("GitHub respondeu "+r.status);
+  const j=await r.json();$("c-gist").value=j.id;ls.set("ej_gist",j.id);ls.set("ej_tok",t);
+  $("msg").textContent="";$("c-link").textContent="Criado. Link para ela já configurado: "+location.origin+location.pathname+"#g="+j.id+" (ela ainda precisa colar o token)";
+  dirty=false;sync()
+ }catch(e){$("msg").textContent="Falhou: "+e.message}
+};
+
+/* ---------- render ---------- */
+const live=()=>all.filter(i=>!i.del);
+function render(){
+ const items=live(),tot=items.length,ok=items.filter(i=>i.ok).length;
+ const prev=items.reduce((a,i)=>a+i.qtd*i.preco,0),gasto=items.filter(i=>i.ok).reduce((a,i)=>a+i.qtd*i.preco,0);
+ $("s-itens").textContent=tot;$("s-ok").textContent=ok+"/"+tot;
+ $("s-prev").textContent=brl(prev);$("s-gasto").textContent=brl(gasto);$("s-falta").textContent=brl(prev-gasto);
+ const p=tot?Math.round(ok/tot*100):0;$("prog").style.width=p+"%";$("pct").textContent=tot?p+"% do enxoval completo":"";
+
+ const cs=[...new Set([...CATS,...items.map(i=>i.cat)])].filter(c=>items.some(i=>i.cat===c));
+ $("chips").innerHTML="";
+ [["","Todas"],...cs.map(c=>[c,c])].forEach(([v,l])=>{const b=document.createElement("button");b.textContent=l;if(v===catF)b.className="a";b.onclick=()=>{catF=v;render()};$("chips").appendChild(b)});
+
+ const q=$("q").value.toLowerCase(),st=$("st").value;
+ const f=items.filter(i=>(!catF||i.cat===catF)&&(!st||(st==="ok")===!!i.ok)&&(!q||(i.nome+" "+(i.links||"")+" "+(i.obs||"")).toLowerCase().includes(q)));
+ const L=$("list");L.innerHTML="";
+ if(!f.length){L.innerHTML='<div class="empty">'+(tot?"Nada com esses filtros.":"Nossa lista começa aqui. Adicione o primeiro item ♡")+"</div>";return}
+ cs.forEach(c=>{
+  const g=f.filter(i=>i.cat===c).sort((a,b)=>(a.ok-b.ok)||(a.prio-b.prio)||a.nome.localeCompare(b.nome));
+  if(!g.length)return;
+  const h=document.createElement("div");h.className="cat";
+  h.innerHTML="<h2>"+esc(c)+"</h2><span>"+g.filter(i=>i.ok).length+"/"+g.length+" · "+brl(g.reduce((a,i)=>a+i.qtd*i.preco,0))+"</span>";L.appendChild(h);
+  g.forEach(i=>{
+   const d=document.createElement("div");d.className="it"+(i.ok?" ok":"");
+   const loja=(i.links||"").split(/\s+/).filter(u=>/^https?:\/\//i.test(u)).map(u=>{let h=u;try{h=new URL(u).hostname.replace(/^www\./,"")}catch(e){}return '<a href="'+esc(u)+'" target="_blank" rel="noopener noreferrer" style="color:var(--rose2)">🔗 '+esc(h)+'</a>'}).join(" · ");
+   d.innerHTML='<input type="checkbox" '+(i.ok?"checked":"")+' aria-label="Já temos"><div class="mid"><div class="nm">'+esc(i.nome)+'</div><div class="meta"><span class="tag p'+i.prio+'">'+["","alta","média","baixa"][i.prio]+"</span> "+i.qtd+"× "+(i.preco?brl(i.preco):"sem preço")+(loja?" · "+loja:"")+(i.obs?'<div>'+esc(i.obs)+'</div>':"")+'</div></div><div class="val">'+(i.preco?brl(i.qtd*i.preco):"—")+'</div><div class="acts"><button data-e aria-label="Editar">✎</button><button data-d aria-label="Apagar">✕</button></div>';
+   d.querySelector("input").onchange=e=>put({...i,ok:e.target.checked});
+   d.querySelector("[data-e]").onclick=()=>edit(i);
+   d.querySelector(".mid").onclick=e=>{if(!e.target.closest("a"))edit(i)};
+   d.querySelector("[data-d]").onclick=()=>{if(confirm("Apagar \""+i.nome+"\"?"))del(i.id)};
+   L.appendChild(d)
+  })
+ })
+}
+
+try{all=JSON.parse(ls.get("ej_cache")||"[]")}catch(e){all=[]}
+{const have=new Set(all.map(i=>i.id));SEEDITEMS.forEach(x=>{if(!have.has(x.id))all.push({...x})})}
+render();sync();
+setInterval(()=>{if(!document.hidden&&!dirty)sync()},45000);
+document.addEventListener("visibilitychange",()=>{if(!document.hidden)sync()});
+</script>
+</body>
+</html>
